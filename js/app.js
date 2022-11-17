@@ -29,32 +29,31 @@ function agregarCurso(e) {
     e.preventDefault();
     if(e.target.classList.contains('agregar-carrito')){
         const cursoSeleccionado = e.target.parentElement.parentElement
-        leerDatosCurso(cursoSeleccionado); 
+        leerDatosCurso(cursoSeleccionado);
     }
 }
 
-function eliminarCurso(e) {
-    if(e.target.classList.contains('borrar-curso')) {
-        const crusoId = e.target.getAttribute("data-id");
- 
-        const productoExistente = articulosCarrito.some( curso => (curso.id === crusoId) && (curso.cantidad > 1) );
- 
-        if(productoExistente){
-            const cursos = articulosCarrito.map( curso =>{
-                if(curso.id === crusoId){
-
-                    curso.cantidad--;
-                    return curso;
-                }else{
-                    return curso;
-                }
-            });
-            articulosCarrito=[...cursos];
-        }else{            
-            articulosCarrito= articulosCarrito.filter(curso => curso.id !== id);
+function eliminarCurso(event){
+  if(event.target.classList.contains('borrar-curso')){
+    const cursoId = event.target.getAttribute('data-id');
+    articulosCarrito.forEach(curso => {
+      if(curso.id === cursoId){
+       // si la cantidad es mayor a 1 entonces cantidad--
+        if(curso.cantidad > 1){
+          // actualizamos la cantidad
+          curso.cantidad--;
+          // mostramos de nuevo el html
+          carritoHTML();
+        }else{
+           // recorremos con filter
+          articulosCarrito = articulosCarrito.filter(curso => curso.id !== cursoId);
+          // volvemos a cargar el html
+          carritoHTML();
         }
-        carritoHTML(); // vuelve a iterar sobre el carrito y elimina ese html
-    }
+      }
+    });
+
+  }
 }
 
 function limpiarCarrito(e){
@@ -64,7 +63,7 @@ function limpiarCarrito(e){
 }
 
 
-// lee el contenido del html 
+// lee el contenido del html
 
 function leerDatosCurso(curso){
 
@@ -81,7 +80,7 @@ function leerDatosCurso(curso){
     //Agregar elementos al carrito
 
     agregarElementosCarrito(infoCurso);
-    
+
     console.log(articulosCarrito);
 
     carritoHTML();
@@ -132,7 +131,7 @@ function carritoHTML(){
             <td>
                 <a href="#" class="borrar-curso" data-id="${id}" > X </a>
             </td>
-        `;  
+        `;
 
         // agrega el html del carrito en el tdbody
         contenedorCarrito.appendChild(row);
