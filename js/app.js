@@ -59,10 +59,19 @@ function carritoHTML(){
     // recorre el carrito y genera el html
 
     articulosCarrito.forEach( curso => {
+        //
+        // traversing sobre los objetos la otra la manera sin taversing es curso.imagen etc
+        const {titulo, precio, imagen, cantidad, id} = curso;
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>
-                ${curso.titulo}
+                <img src="${imagen}" width="100px">
+            </td>
+            <td>${titulo}</td>
+            <td>${precio}</td>
+            <td>${cantidad}</td>
+            <td>
+                <a href="#" class="borrar-curso" data-id="${id}" > X </a>
             </td>
         `;  
 
@@ -81,4 +90,4 @@ function limpiarHTML(){
     while(contenedorCarrito.firstChild){
         contenedorCarrito.removeChild(contenedorCarrito.firstChild);
     }
-}git 
+}
