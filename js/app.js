@@ -9,6 +9,18 @@ cargarEventListener();
 function cargarEventListener() {
     // cuando agregar un curso presionando agregar al carrito
     listaCursos.addEventListener('click', agregarCurso);
+
+    // cuando queremos remover un curso del carrito
+
+    carrito.addEventListener('click', eliminarCurso);
+
+    //vaciar carrito de compras
+    // hay dos opciones cuando es poco codigo se puede utilizar una funcion anonima y si es mas se puede usar una funcion normal
+    vaciarCarrito.addEventListener('click', () =>{
+        articulosCarrito = [];
+        limpiarHTML();
+    } );
+
 }
 
 //funciones
@@ -20,6 +32,37 @@ function agregarCurso(e) {
         leerDatosCurso(cursoSeleccionado); 
     }
 }
+
+function eliminarCurso(e) {
+    if(e.target.classList.contains('borrar-curso')) {
+        const crusoId = e.target.getAttribute("data-id");
+ 
+        const productoExistente = articulosCarrito.some( curso => (curso.id === crusoId) && (curso.cantidad > 1) );
+ 
+        if(productoExistente){
+            const cursos = articulosCarrito.map( curso =>{
+                if(curso.id === crusoId){
+
+                    curso.cantidad--;
+                    return curso;
+                }else{
+                    return curso;
+                }
+            });
+            articulosCarrito=[...cursos];
+        }else{            
+            articulosCarrito= articulosCarrito.filter(curso => curso.id !== id);
+        }
+        carritoHTML(); // vuelve a iterar sobre el carrito y elimina ese html
+    }
+}
+
+function limpiarCarrito(e){
+    articulosCarrito = [];
+
+    limpiarHTML();
+}
+
 
 // lee el contenido del html 
 
@@ -46,7 +89,23 @@ function leerDatosCurso(curso){
 
 
 function agregarElementosCarrito(cursoSeleccionado){
-    articulosCarrito = [...articulosCarrito, cursoSeleccionado]
+    //verifica si el elemento ya existe en el carrito
+
+    const productoExistente = articulosCarrito.some(curso => curso.id === cursoSeleccionado.id);
+    if(productoExistente){
+        const cursos = articulosCarrito.map( curso => {
+            if(curso.id === cursoSeleccionado.id) {
+                curso.cantidad++;
+                return curso; //retorna el curso actualizado
+            } else{
+                return curso; //retorna los cursos que no son duplicados
+            }
+        });
+        articulosCarrito = [...cursos];
+    } else{
+        //Agregar elementos al carrito
+        articulosCarrito = [...articulosCarrito, cursoSeleccionado];
+    }
 }
 
 // Muestra el carrito de compras en el html
